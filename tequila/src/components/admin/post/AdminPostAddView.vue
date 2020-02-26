@@ -1,23 +1,36 @@
 <template>
   <div>
-    <div>
-        <label for="9g3er">文章标题</label>
-        <a-input id="9g3er" placeholder="输入文章标题" style="width: 400px"/>
-        <label for="9g3er">文章封面图片</label>
-        <a-input id="9g3er" placeholder="图片网络地址 http://... 或者 https://..." style="width: 400px"/>
-    </div>
-    <div id="editor"></div>
-    <a-button type="primary" @click="show" style="margin-top: 16px">发布</a-button>
+    <a-spin :spinning="spinning" :delay="delayTime" size="large">
+      <label for="9g3er">文章标题</label>
+      <a-input id="9g3er" placeholder="输入文章标题" v-model="title" style="width: 400px" />
+      <label for="9g3er">文章封面图片</label>
+      <a-input
+        id="9g3er"
+        placeholder="图片网络地址 http://... 或者 https://..."
+        v-model="cover"
+        style="width: 400px"
+      />
+      <div id="editor"></div>
+    </a-spin>
+    <a-button type="primary" @click="submit" style="margin-top: 16px"
+      >发布</a-button
+    >
   </div>
 </template>
 
 <script>
+import api from "@/api/index";
+import axios from "axios";
 import E from "wangeditor";
 
 export default {
   name: "editor",
   data() {
     return {
+      spinning: false,
+      delayTime: 300,
+      title: "",
+      cover: "",
       editorContent: ""
     };
   },
@@ -29,8 +42,18 @@ export default {
     editor.create();
   },
   methods: {
-    show() {
-      console.log(this.editorContent);
+    submit() {
+      this.spinning = true
+      axios.post(api.Post, {
+        title: this.title,
+        content: this.editorContent,
+        cover: this.cover
+      })
+      .then(response => {
+        if (response.data.code == 1) {
+          this.$router.push({path: '/admin/post'})
+        }
+      })
     }
   }
 };
@@ -38,12 +61,11 @@ export default {
 
 <style scoped>
 label {
-    
-    display: block;
-    margin: 8px 0;
+  display: block;
+  margin: 8px 0;
 }
 
 #editor {
-    margin-top: 16px;
+  margin-top: 16px;
 }
 </style>

@@ -3,13 +3,15 @@
     <template slot="operation" slot-scope="text, record">
       <div class="editable-row-operations">
         <span>
-            <a @click="() => del(record.key)">删除</a>
+          <a @click="() => del(record.key)">删除</a>
         </span>
       </div>
     </template>
   </a-table>
 </template>
 <script>
+import api from "@/api/index";
+import axios from "axios";
 const columns = [
   {
     title: "文章ID",
@@ -25,9 +27,9 @@ const columns = [
   },
   {
     title: "发布时间",
-    dataIndex: "time",
+    dataIndex: "createTime",
     width: "40%",
-    scopedSlots: { customRender: "time" }
+    scopedSlots: { customRender: "createTime" }
   },
   {
     title: "操作",
@@ -36,24 +38,34 @@ const columns = [
   }
 ];
 
-const data = [];
-for (let i = 0; i < 100; i++) {
-  data.push({
-    key: i.toString(),
-    id: `${i}`,
-    title: "自信很重要",
-    time: "2020/02/20 18:30"
-  });
-}
 export default {
   data() {
-    this.cacheData = data.map(item => ({ ...item }));
     return {
-      data,
+      data: [],
       columns
     };
   },
+  mounted() {
+    this.fetchList();
+  },
   methods: {
+    fetchList() {
+      axios
+        .get(api.Post)
+        .then(response => {
+          var rawList = response.data.data;
+          rawList.map(element => {
+            element.key = element.id
+            element.createTime = new Date(parseInt(element.createTime))
+              .toLocaleString()
+              .replace(/:\d{1,2}$/, " ");
+          });
+          this.data = rawList;
+        })
+        .catch(error => {
+          console.log(error);
+        });
+    },
     handleChange(value, key, column) {
       const newData = [...this.data];
       const target = newData.filter(item => key === item.key)[0];
@@ -62,8 +74,19 @@ export default {
         this.data = newData;
       }
     },
+    success() {
+      this.$message.success(
+        "删除成功",
+        2
+      );
+    },
     del(key) {
-        console.log(key)
+      axios.delete(api.Post + "/" + key).then(response => {
+        if (response.status == 204) {
+          this.success()
+          this.fetchList()
+        }
+      });
     }
   }
 };

@@ -12,6 +12,8 @@ import DetailView from './components/post/DetailView'
 import IntroView from './components/test/IntroView'
 import TestView from './components/test/TestView'
 import TalkView from './components/talk/TalkView'
+import View404 from './components/exception/View404'
+import View500 from './components/exception/View500'
 // admin
 import UserView from './components/admin/user/UserView'
 import UserAddView from './components/admin/user/UserAddView'
@@ -43,7 +45,8 @@ export default new Router({
         },
         {
           path: '/post/:id',
-          component: DetailView
+          component: DetailView,
+          props: true
         },
         {
           path: '/test',
@@ -56,6 +59,16 @@ export default new Router({
         {
           path: 'talk',
           component: TalkView
+        },
+        {
+          path: 'error404',
+          name: '404',
+          component: View404
+        },
+        {
+          path: 'error500',
+          name: '500',
+          component: View500
         }
         
       ]
