@@ -3,7 +3,8 @@ const api = {
   Login: base + "/auth/login",
   Register: base + "/auth/register",
   Board: base + "/board",
-  Post: base + "/post"
+  Post: base + "/post",
+  Test: base + "/test"
 };
 
 export default api;
