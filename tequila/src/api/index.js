@@ -4,8 +4,6 @@ const api = {
   Register: base + "/auth/register",
   Board: base + "/board",
   Post: base + "/post",
-  Test: base + "/test",
+  Test: base + 'test',
   TestResult: base + "/test/result"
 };
-
-export default api;
