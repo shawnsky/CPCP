@@ -58,18 +58,30 @@
             </a-menu-item>
           </a-sub-menu>
 
-
           <a-menu-item key="8">
             <router-link to="/admin/talk">
               <a-icon type="shopping-cart" /><span>留言板管理</span>
             </router-link>
           </a-menu-item>
 
-          <a-menu-item key="9">
-            <router-link to="/admin/test">
-              <a-icon type="shopping-cart" /><span>心理测试管理</span>
-            </router-link>
-          </a-menu-item>
+          <a-sub-menu key="sub3">
+            <span slot="title"
+              ><a-icon type="appstore" /><span>心理测试管理</span></span
+            >
+
+            <a-menu-item key="9">
+              <router-link to="/admin/test">
+                编辑题目
+              </router-link>
+            </a-menu-item>
+
+            <a-menu-item key="10">
+              <router-link to="/admin/test/result">
+                用户测试结果
+              </router-link>
+            </a-menu-item>
+          </a-sub-menu>
+
         </a-menu>
       </a-layout-sider>
       <a-layout :style="{ marginLeft: collapsed ? '80px' : '280px' }">

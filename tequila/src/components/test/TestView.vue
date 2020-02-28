@@ -32,6 +32,7 @@ export default {
     return {
       data: [],
       checkedList: [],
+      completed: false,
       radioStyle: {
         display: "block",
         height: "30px",
@@ -45,8 +46,23 @@ export default {
       this.checkedList.push(e.target.value)
     },
     submit() {
-      // TODO: handle result api
+      if (this.completed) {
+        this.$message.success("您已经完成本次心理测试")
+        return
+      }
       console.log(this.checkedList)
+      axios
+      .post(api.TestResult, {
+        // FIXME: use token
+        userId: "3",
+        checkedList: this.checkedList
+      })
+      .then(response => {
+        if (response.data.code == 1) {
+          this.$message.success("提交成功")
+          this.completed = true
+        }
+      })
     }
   },
   mounted() {

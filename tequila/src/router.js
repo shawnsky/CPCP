@@ -22,6 +22,7 @@ import AdminPostView from './components/admin/post/AdminPostView'
 import AdminPostAddView from './components/admin/post/AdminPostAddView'
 import AdminTalkView from './components/admin/talk/AdminTalkView'
 import AdminTestView from './components/admin/test/AdminTestView'
+import AdminTestResultView from './components/admin/test/AdminTestResultView'
 
 Vue.use(Router)
 
@@ -105,6 +106,10 @@ export default new Router({
         {
           path: 'test',
           component: AdminTestView
+        },
+        {
+          path: 'test/result',
+          component: AdminTestResultView
         }
       ]
     },
