@@ -1,7 +1,9 @@
 package com.cuc.gin.web;
 
 import com.cuc.gin.mapper.TestEntryMapper;
+import com.cuc.gin.mapper.TestResultMapper;
 import com.cuc.gin.model.TestEntryEntity;
+import com.cuc.gin.model.TestResultEntity;
 import com.cuc.gin.util.HTTPMessage;
 import com.cuc.gin.util.HTTPMessageCode;
 import com.cuc.gin.util.HTTPMessageText;
@@ -11,7 +13,11 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,6 +30,17 @@ public class TestController {
 
     @Autowired
     private TestEntryMapper entryMapper;
+
+    @Autowired
+    private TestResultMapper resultMapper;
+
+    private static Map<String, Integer> scoreSheet = new HashMap<>();
+    static {
+        scoreSheet.put("A", 0);
+        scoreSheet.put("B", 4);
+        scoreSheet.put("C", 6);
+        scoreSheet.put("D", 10);
+    }
 
     @RequestMapping(value = "/test", method = RequestMethod.GET)
     public HTTPMessage<List<TestEntryEntity>> getEntries() {
@@ -63,6 +80,46 @@ public class TestController {
         return new HTTPMessage<>(
                 HTTPMessageCode.Common.OK,
                 HTTPMessageText.Common.OK
+        );
+    }
+
+    @RequestMapping(value = "/test/result", method = RequestMethod.POST)
+    public HTTPMessage<Void> submitResult(@RequestBody Map map) {
+        // FIXME: 2020/2/28 obtain user id from request
+        String userId = (String) map.get("userId");
+        List<String> seq = (List<String>) map.get("checkedList");
+        Map<Integer, String> choice = new HashMap<>();
+        seq.forEach(checked -> {
+            int qIndex = Integer.parseInt(String.valueOf(checked.charAt(0)));
+            String answer = String.valueOf(checked.charAt(1));
+            choice.put(qIndex, answer);
+        });
+        StringBuilder sb = new StringBuilder();
+        int value = 0;
+        for (int i=0;i<10;i++) {
+            sb.append(choice.get(i));
+            value += scoreSheet.get(choice.get(i));
+        }
+        TestResultEntity resultEntity = new TestResultEntity();
+        resultEntity.setResult(sb.toString());
+        resultEntity.setUserId(Long.parseLong(userId));
+        resultEntity.setValue(value);
+        LocalDateTime ldt = LocalDateTime.now();
+        Instant ins = ldt.atZone(ZoneId.of("Asia/Shanghai")).toInstant();
+        resultEntity.setCreateTime(ins.toEpochMilli());
+        resultMapper.add(resultEntity);
+        return new HTTPMessage<>(
+                HTTPMessageCode.Common.OK,
+                HTTPMessageText.Common.OK
+        );
+    }
+
+    @RequestMapping(value = "/test/result", method = RequestMethod.GET)
+    public HTTPMessage<List<TestResultEntity>> getAllResults() {
+        return new HTTPMessage<>(
+                HTTPMessageCode.Common.OK,
+                HTTPMessageText.Common.OK,
+                resultMapper.getAll()
         );
     }
 }
