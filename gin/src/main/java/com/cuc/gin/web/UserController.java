@@ -44,8 +44,7 @@ public class UserController {
         }
         String username = (String) map.get("username");
         String nickname = (String) map.get("nickname");
-        String age = (String) map.get("age");
-        if (Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(nickname) || Strings.isNullOrEmpty(age)) {
+        if (Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(nickname)) {
             return new HTTPMessage<>(
                     HTTPMessageCode.Common.FAILURE,
                     HTTPMessageText.Common.FAILURE
@@ -53,7 +52,6 @@ public class UserController {
         }
         user.setUsername(username);
         user.setNickname(nickname);
-        user.setAge(Integer.parseInt(age));
         userMapper.updateOne(user);
         return new HTTPMessage<>(
                 HTTPMessageCode.Common.OK,
