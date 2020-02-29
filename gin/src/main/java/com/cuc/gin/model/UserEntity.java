@@ -16,6 +16,9 @@ public class UserEntity implements Serializable {
     private String password;
     private Gender gender;
     private String avatar;
+    private Integer status;
+    private Integer age;
+    private String nickname;
 
     public String getAvatar() {
         return avatar;
@@ -32,10 +35,28 @@ public class UserEntity implements Serializable {
         this.password = password;
     }
 
-    public UserEntity(String username, String password, Gender gender) {
-        this.username = username;
-        this.password = password;
-        this.gender = gender;
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
+    public Integer getAge() {
+        return age;
+    }
+
+    public void setAge(Integer age) {
+        this.age = age;
+    }
+
+    public String getNickname() {
+        return nickname;
+    }
+
+    public void setNickname(String nickname) {
+        this.nickname = nickname;
     }
 
     public Gender getGender() {

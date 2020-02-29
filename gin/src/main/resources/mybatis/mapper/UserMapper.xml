@@ -6,11 +6,21 @@
         <result column="username" property="username" jdbcType="VARCHAR" />
         <result column="password" property="password" jdbcType="VARCHAR" />
         <result column="gender" property="gender" javaType="com.cuc.gin.util.Gender"/>
+        <result column="status" property="status" jdbcType="INTEGER" />
+        <result column="avatar" property="avatar" jdbcType="VARCHAR" />
+        <result column="age" property="age" jdbcType="INTEGER" />
+        <result column="nickname" property="nickname" jdbcType="VARCHAR"/>
     </resultMap>
 
     <sql id="baseCols" >
-        id, username, password, gender, avatar
+        id, username, password, gender, avatar, status, age, nickname
     </sql>
+
+    <select id="getAll" resultMap="BaseResultMap">
+        SELECT
+        <include refid="baseCols"/>
+        FROM sys_user
+    </select>
 
     <select id="getOne" parameterType="java.lang.Long" resultMap="BaseResultMap" >
         SELECT
@@ -41,6 +51,15 @@
        		(#{username}, #{password})
     </insert>
 
+    <update id="updateOne" parameterType="com.cuc.gin.model.UserEntity" >
+        UPDATE sys_user
+        SET username = #{username}, nickname = #{nickname}, age = #{age}
+        WHERE id = #{id}
+    </update>
 
+    <delete id="removeOne" parameterType="java.lang.Long">
+        DELETE FROM sys_user
+        WHERE id = #{id}
+    </delete>
 
 </mapper>
