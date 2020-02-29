@@ -5,6 +5,7 @@ const api = {
   Board: base + "/board",
   Post: base + "/post",
   Test: base + 'test',
-  TestResult: base + '/test/result'
+  TestResult: base + '/test/result',
+  User: base + '/user'
 }
 export default api;

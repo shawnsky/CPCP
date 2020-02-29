@@ -40,6 +40,7 @@
 </template>
 
 <script>
+import api from '@/api/index'
 import axios from "axios";
 
 export default {
@@ -57,44 +58,19 @@ export default {
   methods: {
     doRegister() {
       axios
-        .post("http://localhost:8080/api/auth/register", {
+        .post(api.Register, {
           username: this.inputEmail,
           password: this.inputPassword
         })
         .then(response => {
           var code = response.data.code;
           if (code == 1) {
-            this.$router.push({ path: "/login" });
+            this.$message.success('用户添加成功')
           } else if (code == 0) {
-            // do something
             this.isRegisterError = true;
           }
         })
-        .catch(error => {
-          this.$notification["error"]({
-            message: "错误",
-            description:
-              ((error.response || {}).data || {}).message ||
-              "请求出现错误，请稍后再试",
-            duration: 4
-          });
-          this.registerBtn = false;
-        });
     },
-
-    handleSubmit() {
-      const {
-        form: { validateFields },
-        state,
-        $router
-      } = this;
-      validateFields({ force: true }, (err, values) => {
-        if (!err) {
-          state.passwordLevelChecked = false;
-          $router.push({ name: "registerResult", params: { ...values } });
-        }
-      });
-    }
   }
 };
 </script>

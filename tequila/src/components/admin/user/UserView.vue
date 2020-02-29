@@ -1,7 +1,7 @@
 <template>
   <a-table :columns="columns" :dataSource="data" bordered>
     <template
-      v-for="col in ['name', 'age', 'address']"
+      v-for="col in ['username', 'nickname']"
       :slot="col"
       slot-scope="text, record"
     >
@@ -14,6 +14,9 @@
         />
         <template v-else>{{ text }}</template>
       </div>
+    </template>
+    <template slot="gender" slot-scope="record">
+      <div v-if="!record">未知</div> {{ record }}
     </template>
     <template slot="operation" slot-scope="text, record">
       <div class="editable-row-operations">
@@ -30,31 +33,39 @@
           <a @click="() => edit(record.key)">编辑</a>
         </span>
         <span>
-            <a @click="() => del(record.key)">删除</a>
+          <a @click="() => del(record.key)">删除</a>
         </span>
       </div>
     </template>
   </a-table>
 </template>
 <script>
+import api from "@/api/index";
+import axios from "axios";
 const columns = [
   {
-    title: "用户名",
-    dataIndex: "name",
+    title: "用户名/邮箱",
+    dataIndex: "username",
     width: "25%",
-    scopedSlots: { customRender: "name" }
+    scopedSlots: { customRender: "username" }
+  },
+  {
+    title: "昵称",
+    dataIndex: "nickname",
+    width: "30%",
+    scopedSlots: { customRender: "nickname" }
   },
   {
     title: "年龄",
     dataIndex: "age",
-    width: "15%",
+    width: "10%",
     scopedSlots: { customRender: "age" }
   },
   {
-    title: "邮箱",
-    dataIndex: "address",
-    width: "40%",
-    scopedSlots: { customRender: "address" }
+    title: "性别",
+    dataIndex: "gender",
+    width: "10%",
+    scopedSlots: { customRender: "gender" }
   },
   {
     title: "操作",
@@ -63,24 +74,23 @@ const columns = [
   }
 ];
 
-const data = [];
-for (let i = 0; i < 100; i++) {
-  data.push({
-    key: i.toString(),
-    name: `Edrward ${i}`,
-    age: 32,
-    address: `London Park no. ${i}`
-  });
-}
 export default {
   data() {
-    this.cacheData = data.map(item => ({ ...item }));
     return {
-      data,
+      data: [],
       columns
     };
   },
+  mounted() {
+    this.fetchData()
+  },
   methods: {
+    fetchData() {
+      axios.get(api.User).then(response => {
+      this.data = response.data.data;
+      this.data.map(ele => ele.key = ele.id)
+    });
+    },
     handleChange(value, key, column) {
       const newData = [...this.data];
       const target = newData.filter(item => key === item.key)[0];
@@ -99,14 +109,11 @@ export default {
     },
     save(key) {
       const newData = [...this.data];
-      const newCacheData = [...this.cacheData];
       const target = newData.filter(item => key === item.key)[0];
-      const targetCache = newCacheData.filter(item => key === item.key)[0];
-      if (target && targetCache) {
+      if (target) {
         delete target.editable;
         this.data = newData;
-        Object.assign(targetCache, target);
-        this.cacheData = newCacheData;
+        this.updateUser(target)
       }
     },
     cancel(key) {
@@ -122,7 +129,30 @@ export default {
       }
     },
     del(key) {
-        console.log(key)
+      axios
+      .delete(api.User + '/' + key)
+      .then(response => {
+        if (response.status == 204) {
+          this.$message.success('用户删除成功')
+          this.fetchData()
+        } else {
+          this.$message.error('用户删除失败')
+        }
+      })
+    },
+    updateUser(user) {
+      axios
+      .put(api.User + '/' + user.id, {
+        username: user.username,
+        nickname: user.nickname
+      })
+      .then(response => {
+        if (response.data.code == 0) {
+          this.$message.error('用户数据更新失败，请检查输入')
+        } else if (response.data.code == 1) {
+          this.$message.success('用户数据更新成功')
+        }
+      })
     }
   }
 };
