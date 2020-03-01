@@ -26,7 +26,7 @@
         </a-menu-item>
 
         <a-menu-item key="profile">
-          <a-icon type="appstore" />个人中心
+          <router-link to="/user"> <a-icon type="appstore" />个人中心</router-link>
         </a-menu-item>
       </a-menu>
     </a-layout-header>
@@ -53,7 +53,7 @@ export default {
 </script>
 <style>
 .title {
-  font-size: 24px;
+  font-size: 20px;
   color: rgba(0, 0, 0, 0.85);
   font-weight: 500;
   margin-bottom: 16px;

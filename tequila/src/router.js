@@ -12,6 +12,9 @@ import DetailView from './components/post/DetailView'
 import IntroView from './components/test/IntroView'
 import TestView from './components/test/TestView'
 import TalkView from './components/talk/TalkView'
+import ProfileView from './components/user/ProfileView'
+import UserSecurityView from './components/user/UserSecurityView'
+import UserMessageView from './components/user/UserMessageView'
 import View404 from './components/exception/View404'
 import View500 from './components/exception/View500'
 // admin
@@ -60,6 +63,18 @@ export default new Router({
         {
           path: 'talk',
           component: TalkView
+        },
+        {
+          path: 'user',
+          component: ProfileView
+        },
+        {
+          path: 'user/security',
+          component: UserSecurityView
+        },
+        {
+          path: 'user/message',
+          component: UserMessageView
         },
         {
           path: 'error404',
