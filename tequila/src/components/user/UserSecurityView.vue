@@ -4,13 +4,13 @@
     <div class="account-right">
       <div class="title">安全设置</div>
       <div class="setting" style="margin-bottom: 16px">
-        <a-label>旧密码</a-label>
-        <a-input-password placeholder="请输入现在的密码" v-model="oldPassword" />
+        <label>旧密码</label><br>
+        <a-input-password placeholder="请输入现在的密码" v-model="oldPassword" style="width: 300px" />
       </div>
 
       <div class="setting" style="margin-bottom: 16px">
-        <a-label>新密码</a-label>
-        <a-input placeholder="建议使用安全强度高的密码" v-model="age"></a-input>
+        <label>新密码</label><br>
+        <a-input placeholder="建议使用安全强度高的密码" v-model="newPassword" style="width: 300px"></a-input>
       </div>
 
       <a-button type="primary" style="float: right">更新设置</a-button>

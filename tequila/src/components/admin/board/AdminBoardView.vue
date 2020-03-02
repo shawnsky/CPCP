@@ -1,6 +1,7 @@
 <template>
   <div>
-    <h3>在此编辑系统公告</h3>
+    <div class="title">公告管理</div>
+    <h4>编辑系统公告</h4>
     <a-textarea placeholder="系统公告..." :rows="6" v-model="content" />
     <a-button
       type="primary"

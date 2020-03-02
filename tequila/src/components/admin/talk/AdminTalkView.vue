@@ -1,16 +1,19 @@
 <template>
-  <a-table :columns="columns" :dataSource="data" bordered>
-    <template slot="operation" slot-scope="text, record">
-      <div class="editable-row-operations">
-        <span>
+  <div>
+    <div class="title">留言板管理</div>
+    <a-table :columns="columns" :dataSource="data" bordered>
+      <template slot="operation" slot-scope="text, record">
+        <div class="editable-row-operations">
+          <span>
             <a @click="() => del(record.key)">回复</a>
-        </span>
-        <span>
+          </span>
+          <span>
             <a @click="() => del(record.key)">删除</a>
-        </span>
-      </div>
-    </template>
-  </a-table>
+          </span>
+        </div>
+      </template>
+    </a-table>
+  </div>
 </template>
 <script>
 const columns = [
@@ -66,7 +69,7 @@ export default {
       }
     },
     del(key) {
-        console.log(key)
+      console.log(key);
     }
   }
 };

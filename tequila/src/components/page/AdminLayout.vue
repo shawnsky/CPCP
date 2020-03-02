@@ -17,14 +17,14 @@
         <a-menu theme="dark" mode="inline" :defaultSelectedKeys="['1']">
           <a-menu-item key="1">
             <router-link to="/admin/board">
-              <a-icon type="shopping" />
+              <a-icon type="notification" />
               <span>公告管理</span>
             </router-link>
           </a-menu-item>
 
           <a-sub-menu key="sub1">
             <span slot="title"
-              ><a-icon type="appstore" /><span>用户管理</span></span
+              ><a-icon type="user" /><span>用户管理</span></span
             >
 
             <a-menu-item key="2">
@@ -42,7 +42,7 @@
 
           <a-sub-menu key="sub2">
             <span slot="title"
-              ><a-icon type="appstore" /><span>文章管理</span></span
+              ><a-icon type="read" /><span>文章管理</span></span
             >
 
             <a-menu-item key="4">
@@ -60,13 +60,13 @@
 
           <a-menu-item key="8">
             <router-link to="/admin/talk">
-              <a-icon type="shopping-cart" /><span>留言板管理</span>
+              <a-icon type="file-text" /><span>留言板管理</span>
             </router-link>
           </a-menu-item>
 
           <a-sub-menu key="sub3">
             <span slot="title"
-              ><a-icon type="appstore" /><span>心理测试管理</span></span
+              ><a-icon type="project" /><span>心理测试管理</span></span
             >
 
             <a-menu-item key="9">
@@ -81,7 +81,6 @@
               </router-link>
             </a-menu-item>
           </a-sub-menu>
-
         </a-menu>
       </a-layout-sider>
       <a-layout :style="{ marginLeft: collapsed ? '80px' : '280px' }">
@@ -97,7 +96,7 @@
             margin: '24px 16px 0 16px',
             padding: '24px',
             background: '#fff',
-            minHeight: '280px'
+            minHeight: '600px'
           }"
         >
           <router-view></router-view>

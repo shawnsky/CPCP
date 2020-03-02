@@ -1,5 +1,6 @@
 <template>
   <div>
+      <div class="title">编辑题目</div>
     <a-list size="large" bordered :dataSource="data" itemLayout="vertical">
       <a-list-item slot="renderItem" slot-scope="item, index" >
         <a-input

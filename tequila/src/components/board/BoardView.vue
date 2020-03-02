@@ -1,6 +1,6 @@
 <template>
   <div id="b">
-    <div class="title"><a-icon type="notification" /> 系统公告</div>
+    <div class="title"> 系统公告</div>
     <div class="main">
       {{ content }}
     </div>
@@ -20,6 +20,9 @@ export default {
   },
   computed: {
     readableDate() {
+      if (this.updateDate == "") {
+        return "无"
+      }
       return new Date(parseInt(this.updateDate))
         .toLocaleString()
         .replace(/:\d{1,2}$/, " ");

@@ -1,5 +1,6 @@
 <template>
   <div class="main user-layout-register">
+    <div class="title">添加用户</div>
     <a-input
       size="large"
       type="text"

@@ -4,17 +4,17 @@
     <div class="account-right">
       <div class="account-title">基础设置</div>
       <div class="setting" style="margin-bottom: 16px">
-        <a-label>昵称</a-label>
-        <a-input placeholder="给自己起个名字" v-model="nickname"></a-input>
+        <label>昵称</label><br>
+        <a-input placeholder="给自己起个名字" v-model="nickname" style="width: 300px"></a-input>
       </div>
 
       <div class="setting" style="margin-bottom: 16px">
-        <a-label>邮箱</a-label>
-        <a-input v-model="username" disabled></a-input>
+        <label>邮箱</label><br>
+        <a-input v-model="username" disabled style="width: 300px"></a-input>
       </div>
 
       <div class="setting" style="margin-bottom: 16px">
-        <a-label>年龄</a-label><br>
+        <label>年龄</label><br>
         <a-input
           placeholder="请输入年龄"
           v-model="age"
@@ -24,11 +24,10 @@
       </div>
 
       <div class="setting" style="margin-bottom: 16px">
-        <a-label>性别</a-label> <br />
+        <label>性别</label> <br />
         <a-select
           defaultValue="请选择性别"
           style="width: 120px"
-          @change="handleChange"
           v-model="gender"
         >
           <a-select-option value="">保密</a-select-option>

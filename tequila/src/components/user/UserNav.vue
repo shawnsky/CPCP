@@ -2,18 +2,18 @@
   <div>
     <a-menu
       @click="handleClick"
-      style="width: 256px; height: 600px"
+      style="width: 256px; height: 650px"
       :defaultSelectedKeys="[skey]"
       mode="inline"
     >
       <a-menu-item key="1"
-        ><router-link to="/user"> 基本设置</router-link></a-menu-item
+        ><router-link to="/user"> <a-icon type="setting" />基本设置</router-link></a-menu-item
       >
       <a-menu-item key="2"
-        ><router-link to="/user/security"> 安全设置</router-link></a-menu-item
+        ><router-link to="/user/security"><a-icon type="lock" /> 安全设置</router-link></a-menu-item
       >
       <a-menu-item key="3"
-        ><router-link to="/user/message"> 消息中心</router-link></a-menu-item
+        ><router-link to="/user/message"> <a-icon type="message" />消息中心</router-link></a-menu-item
       >
     </a-menu>
   </div>

@@ -1,43 +1,47 @@
 <template>
-  <a-table :columns="columns" :dataSource="data" bordered>
-    <template
-      v-for="col in ['username', 'nickname']"
-      :slot="col"
-      slot-scope="text, record"
-    >
-      <div :key="col">
-        <a-input
-          v-if="record.editable"
-          style="margin: -5px 0"
-          :value="text"
-          @change="e => handleChange(e.target.value, record.key, col)"
-        />
-        <template v-else>{{ text }}</template>
-      </div>
-    </template>
-    <template slot="gender" slot-scope="record">
-      <div v-if="!record">未知</div> {{ record }}
-    </template>
-    <template slot="operation" slot-scope="text, record">
-      <div class="editable-row-operations">
-        <span v-if="record.editable">
-          <a @click="() => save(record.key)">保存</a>
-          <a-popconfirm
-            title="确定取消编辑吗？"
-            @confirm="() => cancel(record.key)"
-          >
-            <a>取消</a>
-          </a-popconfirm>
-        </span>
-        <span v-else>
-          <a @click="() => edit(record.key)">编辑</a>
-        </span>
-        <span>
-          <a @click="() => del(record.key)">删除</a>
-        </span>
-      </div>
-    </template>
-  </a-table>
+  <div>
+    <div class="title">用户列表</div>
+    <a-table :columns="columns" :dataSource="data" bordered>
+      <template
+        v-for="col in ['username', 'nickname']"
+        :slot="col"
+        slot-scope="text, record"
+      >
+        <div :key="col">
+          <a-input
+            v-if="record.editable"
+            style="margin: -5px 0"
+            :value="text"
+            @change="e => handleChange(e.target.value, record.key, col)"
+          />
+          <template v-else>{{ text }}</template>
+        </div>
+      </template>
+      <template slot="gender" slot-scope="record">
+        <div v-if="!record">未知</div>
+        {{ record }}
+      </template>
+      <template slot="operation" slot-scope="text, record">
+        <div class="editable-row-operations">
+          <span v-if="record.editable">
+            <a @click="() => save(record.key)">保存</a>
+            <a-popconfirm
+              title="确定取消编辑吗？"
+              @confirm="() => cancel(record.key)"
+            >
+              <a>取消</a>
+            </a-popconfirm>
+          </span>
+          <span v-else>
+            <a @click="() => edit(record.key)">编辑</a>
+          </span>
+          <span>
+            <a @click="() => del(record.key)">删除</a>
+          </span>
+        </div>
+      </template>
+    </a-table>
+  </div>
 </template>
 <script>
 import api from "@/api/index";
@@ -82,14 +86,14 @@ export default {
     };
   },
   mounted() {
-    this.fetchData()
+    this.fetchData();
   },
   methods: {
     fetchData() {
       axios.get(api.User).then(response => {
-      this.data = response.data.data;
-      this.data.map(ele => ele.key = ele.id)
-    });
+        this.data = response.data.data;
+        this.data.map(ele => (ele.key = ele.id));
+      });
     },
     handleChange(value, key, column) {
       const newData = [...this.data];
@@ -113,7 +117,7 @@ export default {
       if (target) {
         delete target.editable;
         this.data = newData;
-        this.updateUser(target)
+        this.updateUser(target);
       }
     },
     cancel(key) {
@@ -129,30 +133,28 @@ export default {
       }
     },
     del(key) {
-      axios
-      .delete(api.User + '/' + key)
-      .then(response => {
+      axios.delete(api.User + "/" + key).then(response => {
         if (response.status == 204) {
-          this.$message.success('用户删除成功')
-          this.fetchData()
+          this.$message.success("用户删除成功");
+          this.fetchData();
         } else {
-          this.$message.error('用户删除失败')
+          this.$message.error("用户删除失败");
         }
-      })
+      });
     },
     updateUser(user) {
       axios
-      .put(api.User + '/' + user.id, {
-        username: user.username,
-        nickname: user.nickname
-      })
-      .then(response => {
-        if (response.data.code == 0) {
-          this.$message.error('用户数据更新失败，请检查输入')
-        } else if (response.data.code == 1) {
-          this.$message.success('用户数据更新成功')
-        }
-      })
+        .put(api.User + "/" + user.id, {
+          username: user.username,
+          nickname: user.nickname
+        })
+        .then(response => {
+          if (response.data.code == 0) {
+            this.$message.error("用户数据更新失败，请检查输入");
+          } else if (response.data.code == 1) {
+            this.$message.success("用户数据更新成功");
+          }
+        });
     }
   }
 };

@@ -1,5 +1,6 @@
 <template>
   <div>
+    <div class="title">发布文章</div>
     <a-spin :spinning="spinning" :delay="delayTime" size="large">
       <label for="9g3er">文章标题</label>
       <a-input id="9g3er" placeholder="输入文章标题" v-model="title" style="width: 400px" />

@@ -1,13 +1,16 @@
 <template>
-  <a-table :columns="columns" :dataSource="data" bordered>
-    <template slot="operation" slot-scope="text, record">
-      <div class="editable-row-operations">
-        <span>
-          <a @click="() => del(record.key)">删除</a>
-        </span>
-      </div>
-    </template>
-  </a-table>
+  <div>
+    <div class="title">文章列表</div>
+    <a-table :columns="columns" :dataSource="data" bordered>
+      <template slot="operation" slot-scope="text, record">
+        <div class="editable-row-operations">
+          <span>
+            <a @click="() => del(record.key)">删除</a>
+          </span>
+        </div>
+      </template>
+    </a-table>
+  </div>
 </template>
 <script>
 import api from "@/api/index";
@@ -55,7 +58,7 @@ export default {
         .then(response => {
           var rawList = response.data.data;
           rawList.map(element => {
-            element.key = element.id
+            element.key = element.id;
             element.createTime = new Date(parseInt(element.createTime))
               .toLocaleString()
               .replace(/:\d{1,2}$/, " ");
@@ -75,16 +78,13 @@ export default {
       }
     },
     success() {
-      this.$message.success(
-        "删除成功",
-        2
-      );
+      this.$message.success("删除成功", 2);
     },
     del(key) {
       axios.delete(api.Post + "/" + key).then(response => {
         if (response.status == 204) {
-          this.success()
-          this.fetchList()
+          this.success();
+          this.fetchList();
         }
       });
     }

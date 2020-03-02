@@ -1,31 +1,34 @@
 <template>
-  <a-table :columns="columns" :dataSource="data" bordered>
-    <template slot="value" slot-scope="record">
-      {{ record }}
-      <a-tag v-if="record >= 50" color="#f50" style="margin-left: 8px"
-        >建议沟通</a-tag
-      >
-      <a-tag
-        v-if="record >= 30 && record < 50"
-        color="#2db7f5"
-        style="margin-left: 8px"
-        >需要关注</a-tag
-      >
-      <a-tag v-if="record < 30" color="#87d068" style="margin-left: 8px"
-        >正常</a-tag
-      >
-    </template>
-    <template slot="result" slot-scope="record">
-      <div style="letter-spacing: 8px">{{ record }}</div>
-    </template>
-    <template slot="operation" slot-scope="text, record">
-      <div class="editable-row-operations">
-        <span>
-          <a @click="() => getContact(record.userId)">联系他</a>
-        </span>
-      </div>
-    </template>
-  </a-table>
+  <div>
+    <div class="title">用户测试结果</div>
+    <a-table :columns="columns" :dataSource="data" bordered>
+      <template slot="value" slot-scope="record">
+        {{ record }}
+        <a-tag v-if="record >= 50" color="#f50" style="margin-left: 8px"
+          >建议沟通</a-tag
+        >
+        <a-tag
+          v-if="record >= 30 && record < 50"
+          color="#2db7f5"
+          style="margin-left: 8px"
+          >需要关注</a-tag
+        >
+        <a-tag v-if="record < 30" color="#87d068" style="margin-left: 8px"
+          >正常</a-tag
+        >
+      </template>
+      <template slot="result" slot-scope="record">
+        <div style="letter-spacing: 8px">{{ record }}</div>
+      </template>
+      <template slot="operation" slot-scope="text, record">
+        <div class="editable-row-operations">
+          <span>
+            <a @click="() => getContact(record.userId)">联系他</a>
+          </span>
+        </div>
+      </template>
+    </a-table>
+  </div>
 </template>
 <script>
 import api from "@/api/index";

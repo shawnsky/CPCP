@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="title"><a-icon type="read" /> 推荐文章</div>
+    <div class="title">推荐文章</div>
     <a-list
       itemLayout="vertical"
       size="large"
