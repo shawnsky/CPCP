@@ -35,7 +35,7 @@ export default {
   methods: {
     submit() {
       axios
-      .put(api.User + '/' + '3' + '/password', {
+      .put(api.User + '/' + localStorage.userId + '/password', {
         oldPassword: this.oldPassword,
         newPassword: this.newPassword
       })

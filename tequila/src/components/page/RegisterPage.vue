@@ -117,6 +117,7 @@
 </template>
 
 <script>
+import api from '@/api/index'
 import axios from "axios";
 const levelNames = {
   0: "低",
@@ -222,7 +223,7 @@ export default {
 
     doRegister() {
       axios
-        .post("http://localhost:8080/api/auth/register", {
+        .post(api.Register, {
           username: this.inputEmail,
           password: this.inputPassword
         })

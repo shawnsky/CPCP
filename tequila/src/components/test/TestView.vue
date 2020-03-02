@@ -53,8 +53,7 @@ export default {
       console.log(this.checkedList)
       axios
       .post(api.TestResult, {
-        // FIXME: use token
-        userId: "3",
+        userId: localStorage.userId,
         checkedList: this.checkedList
       })
       .then(response => {

@@ -64,7 +64,7 @@ export default {
         return
       }
       axios
-      .put(api.User+ '/' + '3', {
+      .put(api.User+ '/' + localStorage.userId, {
         username: this.username,
         nickname: this.nickname,
         age: this.age,

@@ -88,6 +88,7 @@
 </template>
 
 <script>
+import api from '@/api/index'
 import axios from "axios";
 export default {
   data() {
@@ -123,17 +124,19 @@ export default {
     },
     handleTabClick(key) {
       this.customActiveKey = key;
-      // this.form.resetFields()
     },
     doLogin() {
       axios
-        .post("http://localhost:8080/api/auth/login", {
+        .post(api.Login, {
           username: this.inputUsername,
           password: this.inputPassword
         })
         .then(response => {
           var code = response.data.code;
           if (code == 1) {
+            localStorage.token = response.data.data.jws
+            localStorage.userId = response.data.data.userId
+            localStorage.username = response.data.data.username
             this.$router.push({ path: "/" });
             // 延迟 1 秒显示欢迎信息
             setTimeout(() => {

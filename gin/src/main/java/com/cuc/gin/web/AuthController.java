@@ -3,11 +3,13 @@ package com.cuc.gin.web;
 import com.cuc.gin.mapper.UserMapper;
 import com.cuc.gin.model.UserEntity;
 import com.cuc.gin.util.*;
+import com.cuc.gin.vo.UserInfoVo;
 import com.google.common.base.Strings;
 import io.jsonwebtoken.Jwts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.Serializable;
 import java.security.Key;
 import java.util.Map;
 
@@ -27,7 +29,7 @@ public class AuthController {
     private Key jwtKey;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public HTTPMessage<String> login(@RequestBody Map map) {
+    public HTTPMessage<UserInfoVo> login(@RequestBody Map map) {
         String username = (String) map.get("username");
         String password = (String) map.get("password");
 
@@ -38,11 +40,12 @@ public class AuthController {
         UserEntity userEntity = userMapper.getOneByUsername(username);
         if (userEntity != null && userEntity.getPassword().equals(CryptoUtil.getHashedPassword(password))) {
             // Sign JWT token
-            String jws = Jwts.builder().setSubject(userEntity.getUsername()).signWith(jwtKey).compact();
+            String jws = Jwts.builder().setSubject(userEntity.getId().toString()).signWith(jwtKey).compact();
+            UserInfoVo userInfo = new UserInfoVo(userEntity.getId(), userEntity.getUsername(), jws);
             return new HTTPMessage<>(
                     HTTPMessageCode.Login.OK,
                     HTTPMessageText.Login.OK,
-                    jws
+                    userInfo
             );
         } else {
             return new HTTPMessage<>(
