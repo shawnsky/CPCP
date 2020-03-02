@@ -11,6 +11,12 @@ import org.springframework.web.bind.annotation.*;
 
 import java.io.Serializable;
 import java.security.Key;
+import java.time.Instant;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Map;
 
 
@@ -40,7 +46,10 @@ public class AuthController {
         UserEntity userEntity = userMapper.getOneByUsername(username);
         if (userEntity != null && userEntity.getPassword().equals(CryptoUtil.getHashedPassword(password))) {
             // Sign JWT token
-            String jws = Jwts.builder().setSubject(userEntity.getId().toString()).signWith(jwtKey).compact();
+            Calendar cal = Calendar.getInstance();
+            cal.setTime(new Date());
+            cal.add(Calendar.HOUR_OF_DAY, 1);
+            String jws = Jwts.builder().setSubject(userEntity.getId().toString()).setExpiration(cal.getTime()).signWith(jwtKey).compact();
             UserInfoVo userInfo = new UserInfoVo(userEntity.getId(), userEntity.getUsername(), jws);
             return new HTTPMessage<>(
                     HTTPMessageCode.Login.OK,

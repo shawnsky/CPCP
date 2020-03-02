@@ -1,5 +1,6 @@
 package com.cuc.gin.web;
 
+import com.google.common.base.Strings;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.JwtException;
@@ -31,6 +32,11 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         }
         String compactJws = request.getHeader("Authorization");
+        if (Strings.isNullOrEmpty(compactJws)) {
+            System.out.println("Null Token");
+            response.setStatus(HttpStatus.UNAUTHORIZED.value());
+            return false;
+        }
         try {
             Jws<Claims> jws = Jwts.parserBuilder().setSigningKey(jwtKey).build().parseClaimsJws(compactJws);
             // OK, we can trust this JWT. Then check expire date.
@@ -42,6 +48,7 @@ public class AuthInterceptor implements HandlerInterceptor {
             return true;
         } catch (JwtException e) {
             //don't trust the JWT!
+            System.out.println("Check token failed");
             response.setStatus(HttpStatus.UNAUTHORIZED.value());
             return false;
         }
