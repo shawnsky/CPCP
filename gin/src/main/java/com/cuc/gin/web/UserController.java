@@ -2,6 +2,7 @@ package com.cuc.gin.web;
 
 import com.cuc.gin.mapper.UserMapper;
 import com.cuc.gin.model.UserEntity;
+import com.cuc.gin.util.Gender;
 import com.cuc.gin.util.HTTPMessage;
 import com.cuc.gin.util.HTTPMessageCode;
 import com.cuc.gin.util.HTTPMessageText;
@@ -44,11 +45,28 @@ public class UserController {
         }
         String username = (String) map.get("username");
         String nickname = (String) map.get("nickname");
+        String age = (String) map.get("age");
+        String gender = (String) map.get("gender");
         if (Strings.isNullOrEmpty(username) || Strings.isNullOrEmpty(nickname)) {
             return new HTTPMessage<>(
                     HTTPMessageCode.Common.FAILURE,
                     HTTPMessageText.Common.FAILURE
             );
+        }
+        if (!Strings.isNullOrEmpty(age)) {
+            user.setAge(Integer.parseInt(age));
+        }
+        if (!Strings.isNullOrEmpty(gender)) {
+            switch (gender) {
+                case "M":
+                    user.setGender(Gender.MALE);
+                    break;
+                case "F":
+                    user.setGender(Gender.FEMALE);
+                    break;
+                default:
+                    break;
+            }
         }
         user.setUsername(username);
         user.setNickname(nickname);
