@@ -36,12 +36,14 @@
         </a-select>
       </div>
 
-      <a-button type="primary" style="float: right">更新设置</a-button>
+      <a-button type="primary" style="float: right" @click="submit">更新设置</a-button>
     </div>
   </div>
 </template>
 
 <script>
+import api from '@/api/index'
+import axios from 'axios'
 import UserNav from "./UserNav";
 export default {
   components: {
@@ -54,6 +56,26 @@ export default {
       age: "",
       gender: ""
     };
+  },
+  methods: {
+    submit() {
+      if (this.nickname == '' || this.age == '' || this.username == '') {
+        this.$message.error('昵称或年龄不能为空')
+        return
+      }
+      axios
+      .put(api.User+ '/' + '3', {
+        username: this.username,
+        nickname: this.nickname,
+        age: this.age,
+        gender: this.gender
+      })
+      .then(response => {
+        if (response.data.code == 1) {
+          this.$message.success('资料更新成功')
+        }
+      })
+    }
   }
 };
 </script>
