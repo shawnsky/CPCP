@@ -13,12 +13,14 @@
         <a-input placeholder="建议使用安全强度高的密码" v-model="newPassword" style="width: 300px"></a-input>
       </div>
 
-      <a-button type="primary" style="float: right">更新设置</a-button>
+      <a-button type="primary" style="float: right" @click="submit">更新设置</a-button>
     </div>
   </div>
 </template>
 
 <script>
+import api from '@/api/index'
+import axios from 'axios'
 import UserNav from "./UserNav";
 export default {
   components: {
@@ -29,6 +31,23 @@ export default {
         oldPassword: '',
         newPassword: ''
     };
+  },
+  methods: {
+    submit() {
+      axios
+      .put(api.User + '/' + '3' + '/password', {
+        oldPassword: this.oldPassword,
+        newPassword: this.newPassword
+      })
+      .then(response => {
+        if (response.data.code == 1) {
+          this.$message.success('密码更改成功')
+        } else if (response.data.code == 0) {
+          this.$message.error('请检查输入，以及旧密码是否正确')
+        }
+      })
+
+    }
   }
 };
 </script>
