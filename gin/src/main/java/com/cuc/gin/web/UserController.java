@@ -2,10 +2,7 @@ package com.cuc.gin.web;
 
 import com.cuc.gin.mapper.UserMapper;
 import com.cuc.gin.model.UserEntity;
-import com.cuc.gin.util.Gender;
-import com.cuc.gin.util.HTTPMessage;
-import com.cuc.gin.util.HTTPMessageCode;
-import com.cuc.gin.util.HTTPMessageText;
+import com.cuc.gin.util.*;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -88,6 +85,33 @@ public class UserController {
         }
         userMapper.removeOne(id);
         response.setStatus(HttpStatus.NO_CONTENT.value());
+        return new HTTPMessage<>(
+                HTTPMessageCode.Common.OK,
+                HTTPMessageText.Common.OK
+        );
+    }
+
+    @RequestMapping(value = "/user/{id}/password", method = RequestMethod.PUT)
+    public HTTPMessage<Void> updateUserPassword(@PathVariable Long id, @RequestBody Map map) {
+        UserEntity user = userMapper.getOne(id);
+        if (user == null) {
+            return new HTTPMessage<>(
+                    HTTPMessageCode.Common.FAILURE,
+                    HTTPMessageText.Common.FAILURE
+            );
+        }
+        String oldPassword = (String) map.get("oldPassword");
+        String newPassword = (String) map.get("newPassword");
+        if (Strings.isNullOrEmpty(oldPassword)
+                || Strings.isNullOrEmpty(newPassword)
+                || !CryptoUtil.getHashedPassword(oldPassword).equals(user.getPassword())) {
+            return new HTTPMessage<>(
+                    HTTPMessageCode.Common.FAILURE,
+                    HTTPMessageText.Common.FAILURE
+            );
+        }
+        user.setPassword(CryptoUtil.getHashedPassword(newPassword));
+        userMapper.updateOne(user);
         return new HTTPMessage<>(
                 HTTPMessageCode.Common.OK,
                 HTTPMessageText.Common.OK
