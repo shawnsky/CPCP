@@ -1,5 +1,6 @@
 package com.cuc.gin.web;
 
+import com.cuc.gin.annotation.AdminRequired;
 import com.cuc.gin.mapper.BoardMapper;
 import com.cuc.gin.model.BoardEntity;
 import com.cuc.gin.util.HTTPMessage;
@@ -11,6 +12,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -38,7 +41,8 @@ public class BoardController {
     }
 
     @RequestMapping(value = "/board", method = RequestMethod.PUT)
-    public HTTPMessage<Void> updateBoard(@RequestBody Map map) {
+    @AdminRequired
+    public HTTPMessage<Void> updateBoard(HttpServletRequest request, HttpServletResponse response, @RequestBody Map map) {
         String newContent = (String) map.get("content");
         LocalDateTime ldt = LocalDateTime.now();
         Instant ins = ldt.atZone(ZoneId.of("Asia/Shanghai")).toInstant();

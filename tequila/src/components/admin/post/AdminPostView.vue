@@ -54,7 +54,9 @@ export default {
   methods: {
     fetchList() {
       axios
-        .get(api.Post)
+        .get(api.Post, {
+          headers: { Authorization: localStorage.token }
+        })
         .then(response => {
           var rawList = response.data.data;
           rawList.map(element => {
@@ -66,6 +68,9 @@ export default {
           this.data = rawList;
         })
         .catch(error => {
+          if (error.response.status == 401) {
+            this.$router.push({path: '/login'})
+          }
           console.log(error);
         });
     },
@@ -81,7 +86,9 @@ export default {
       this.$message.success("删除成功", 2);
     },
     del(key) {
-      axios.delete(api.Post + "/" + key).then(response => {
+      axios.delete(api.Post + "/" + key, {
+        headers: { Authorization: localStorage.token }
+      }).then(response => {
         if (response.status == 204) {
           this.success();
           this.fetchList();

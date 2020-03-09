@@ -49,11 +49,17 @@ export default {
         title: this.title,
         content: this.editorContent,
         cover: this.cover
+      }, {
+        headers: { Authorization: localStorage.token }
       })
       .then(response => {
         if (response.data.code == 1) {
           this.$router.push({path: '/admin/post'})
         }
+      })
+      .catch(error => {
+        this.$message.error('提交失败，请检查登录状态')
+        console.log(error)
       })
     }
   }

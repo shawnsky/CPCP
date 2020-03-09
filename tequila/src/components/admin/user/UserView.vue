@@ -90,10 +90,20 @@ export default {
   },
   methods: {
     fetchData() {
-      axios.get(api.User).then(response => {
-        this.data = response.data.data;
-        this.data.map(ele => (ele.key = ele.id));
-      });
+      axios
+        .get(api.User, {
+          headers: { Authorization: localStorage.token }
+        })
+        .then(response => {
+          this.data = response.data.data;
+          this.data.map(ele => (ele.key = ele.id));
+        })
+        .catch(error => {
+          if (error.response.status == 401) {
+            this.$router.push({ path: "/login" });
+          }
+          console.log(error);
+        });
     },
     handleChange(value, key, column) {
       const newData = [...this.data];
@@ -133,21 +143,31 @@ export default {
       }
     },
     del(key) {
-      axios.delete(api.User + "/" + key).then(response => {
-        if (response.status == 204) {
-          this.$message.success("用户删除成功");
-          this.fetchData();
-        } else {
-          this.$message.error("用户删除失败");
-        }
-      });
+      axios
+        .delete(api.User + "/" + key, {
+          headers: { Authorization: localStorage.token }
+        })
+        .then(response => {
+          if (response.status == 204) {
+            this.$message.success("用户删除成功");
+            this.fetchData();
+          } else {
+            this.$message.error("用户删除失败");
+          }
+        });
     },
     updateUser(user) {
       axios
-        .put(api.User + "/" + user.id, {
-          username: user.username,
-          nickname: user.nickname
-        })
+        .put(
+          api.User + "/" + user.id,
+          {
+            username: user.username,
+            nickname: user.nickname
+          },
+          {
+            headers: { Authorization: localStorage.token }
+          }
+        )
         .then(response => {
           if (response.data.code == 0) {
             this.$message.error("用户数据更新失败，请检查输入");

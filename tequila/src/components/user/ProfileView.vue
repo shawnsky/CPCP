@@ -52,7 +52,7 @@ export default {
   data() {
     return {
       nickname: "",
-      username: "admin@admin.org",
+      username: localStorage.username,
       age: "",
       gender: ""
     };
@@ -69,6 +69,8 @@ export default {
         nickname: this.nickname,
         age: this.age,
         gender: this.gender
+      }, {
+        headers: { Authorization: localStorage.token }
       })
       .then(response => {
         if (response.data.code == 1) {

@@ -62,6 +62,8 @@ export default {
         .post(api.Register, {
           username: this.inputEmail,
           password: this.inputPassword
+        }, {
+          headers: { Authorization: localStorage.token }
         })
         .then(response => {
           var code = response.data.code;

@@ -53,14 +53,19 @@ export default {
     };
   },
   mounted() {
-    axios.get(api.Test).then(response => {
+    axios.get(api.Test, {
+      headers: { Authorization: localStorage.token }
+    }).then(response => {
       const list = response.data.data;
       list.forEach((element,index) => {
         this.data[index].q = element.question
         this.data[index].a = element.ansA + ' ' + element.ansB + ' ' + element.ansC + ' ' + element.ansD 
       })
       // this.$forceUpdate()
-    });
+    }).catch(error => {
+      this.$router.push({path: '/login'})
+      console.log(error)
+    })
   },
   methods: {
     submit() {
@@ -74,6 +79,8 @@ export default {
         .post(api.Test, {
           questions: questions,
           choices: choices
+        }, {
+          headers: { Authorization: localStorage.token }
         })
         .then(response => {
           if (response.data.code == 0) {

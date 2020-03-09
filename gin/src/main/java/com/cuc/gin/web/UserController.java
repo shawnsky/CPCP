@@ -1,5 +1,6 @@
 package com.cuc.gin.web;
 
+import com.cuc.gin.annotation.AdminRequired;
 import com.cuc.gin.mapper.UserMapper;
 import com.cuc.gin.model.UserEntity;
 import com.cuc.gin.util.*;
@@ -8,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 import java.util.Map;
@@ -23,7 +25,8 @@ public class UserController {
     private UserMapper userMapper;
 
     @RequestMapping(value = "/user", method = RequestMethod.GET)
-    public HTTPMessage<List<UserEntity>> getAll() {
+    @AdminRequired
+    public HTTPMessage<List<UserEntity>> getAll(HttpServletRequest request, HttpServletResponse response) {
         return new HTTPMessage<>(
                 HTTPMessageCode.Common.OK,
                 HTTPMessageText.Common.OK,
@@ -75,7 +78,8 @@ public class UserController {
     }
 
     @RequestMapping(value = "/user/{id}", method = RequestMethod.DELETE)
-    public HTTPMessage<Void> deleteOne(@PathVariable Long id, HttpServletResponse response) {
+    @AdminRequired
+    public HTTPMessage<Void> deleteOne(HttpServletRequest request, HttpServletResponse response, @PathVariable Long id) {
         UserEntity user = userMapper.getOne(id);
         if (user == null) {
             return new HTTPMessage<>(

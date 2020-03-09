@@ -45,6 +45,7 @@ public class AuthInterceptor implements HandlerInterceptor {
                 return false;
             }
             // Need to check Subject in Controller.
+            request.setAttribute("userId", jws.getBody().getSubject());
             return true;
         } catch (JwtException e) {
             //don't trust the JWT!

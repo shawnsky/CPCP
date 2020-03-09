@@ -1,5 +1,6 @@
 package com.cuc.gin.web;
 
+import com.cuc.gin.annotation.AdminRequired;
 import com.cuc.gin.mapper.TestEntryMapper;
 import com.cuc.gin.mapper.TestResultMapper;
 import com.cuc.gin.model.TestEntryEntity;
@@ -13,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -85,7 +88,6 @@ public class TestController {
 
     @RequestMapping(value = "/test/result", method = RequestMethod.POST)
     public HTTPMessage<Void> submitResult(@RequestBody Map map) {
-        // FIXME: 2020/2/28 obtain user id from request
         String userId = (String) map.get("userId");
         List<String> seq = (List<String>) map.get("checkedList");
         Map<Integer, String> choice = new HashMap<>();
@@ -115,7 +117,8 @@ public class TestController {
     }
 
     @RequestMapping(value = "/test/result", method = RequestMethod.GET)
-    public HTTPMessage<List<TestResultEntity>> getAllResults() {
+    @AdminRequired
+    public HTTPMessage<List<TestResultEntity>> getAllResults(HttpServletRequest request, HttpServletResponse response) {
         return new HTTPMessage<>(
                 HTTPMessageCode.Common.OK,
                 HTTPMessageText.Common.OK,

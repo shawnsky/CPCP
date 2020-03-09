@@ -55,6 +55,8 @@ export default {
       .post(api.TestResult, {
         userId: localStorage.userId,
         checkedList: this.checkedList
+      }, {
+        headers: { Authorization: localStorage.token }
       })
       .then(response => {
         if (response.data.code == 1) {
@@ -66,9 +68,16 @@ export default {
   },
   mounted() {
     axios
-    .get(api.Test)
+    .get(api.Test, {
+      headers: { Authorization: localStorage.token }
+    })
     .then(response => {
         this.data = response.data.data
+    })
+    .catch(error => {
+      if (error.response.status == 401) {
+        this.$router.push({path: '/login'})
+      }
     })
   }
 };

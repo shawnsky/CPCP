@@ -1,5 +1,6 @@
 package com.cuc.gin.web;
 
+import com.cuc.gin.annotation.AdminRequired;
 import com.cuc.gin.mapper.PostMapper;
 import com.cuc.gin.model.PostEntity;
 import com.cuc.gin.util.HTTPMessage;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
 import java.time.LocalDateTime;
@@ -28,6 +30,7 @@ public class PostController {
     @Autowired
     private PostMapper postMapper;
 
+
     @RequestMapping(value = "/post", method = RequestMethod.GET)
     public HTTPMessage<List<PostEntity>> getPosts() {
         List<PostEntity> list = postMapper.getAll();
@@ -40,7 +43,8 @@ public class PostController {
     }
 
     @RequestMapping(value = "/post", method = RequestMethod.POST)
-    public HTTPMessage<Void> addPost(@RequestBody Map map, HttpServletResponse response) {
+    @AdminRequired
+    public HTTPMessage<Void> addPost(HttpServletRequest request,  HttpServletResponse response, @RequestBody Map map) {
         String title = (String) map.get("title");
         String content = (String) map.get("content");
         String cover = (String) map.get("cover");
@@ -82,7 +86,8 @@ public class PostController {
 
 
     @RequestMapping(value = "/post/{id}", method = RequestMethod.DELETE)
-    public HTTPMessage<Void> removePost(@PathVariable Long id, HttpServletResponse response) {
+    @AdminRequired
+    public HTTPMessage<Void> removePost(HttpServletRequest request, HttpServletResponse response, @PathVariable Long id) {
         postMapper.deleteOne(id);
         response.setStatus(HttpStatus.NO_CONTENT.value());
         return new HTTPMessage<>(

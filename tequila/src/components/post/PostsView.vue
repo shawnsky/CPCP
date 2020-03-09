@@ -35,7 +35,9 @@ export default {
   },
   mounted() {
     axios
-      .get(api.Post)
+      .get(api.Post, {
+        headers: { Authorization: localStorage.token }
+      })
       .then(response => {
         var rawList = response.data.data
         rawList.map(element => {
@@ -46,6 +48,7 @@ export default {
         this.listData = rawList
       })
       .catch(error => {
+        this.$router.error({path: '/login'})
         console.log(error);
       });
   }

@@ -38,6 +38,8 @@ export default {
       .put(api.User + '/' + localStorage.userId + '/password', {
         oldPassword: this.oldPassword,
         newPassword: this.newPassword
+      }, {
+        headers: { Authorization: localStorage.token }
       })
       .then(response => {
         if (response.data.code == 1) {

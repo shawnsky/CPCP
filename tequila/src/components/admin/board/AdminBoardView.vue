@@ -25,11 +25,16 @@ export default {
   },
   mounted() {
     axios
-      .get(api.Board)
+      .get(api.Board, {
+        headers: { Authorization: localStorage.token }
+      })
       .then(response => {
         this.content = response.data.data.content;
       })
       .catch(error => {
+        if (error.response.status == 401) {
+          this.$router.push({ path: "/login" });
+        }
         console.log(error);
       });
   },
@@ -37,14 +42,24 @@ export default {
     commitNewContent() {
       this.loading = true;
       axios
-        .put(api.Board, {
-          content: this.content
-        })
+        .put(
+          api.Board,
+          {
+            content: this.content
+          },
+          {
+            headers: { Authorization: localStorage.token }
+          }
+        )
         .then(response => {
           if (response.data.code == 1) {
             this.loading = false;
           }
-        });
+        })
+        .catch(error => {
+          this.$message.error('更新失败')
+          console.log(error)
+        })
     }
   }
 };
