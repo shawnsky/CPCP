@@ -17,9 +17,14 @@
           <template v-else>{{ text }}</template>
         </div>
       </template>
-      <template slot="gender" slot-scope="record">
+      <template slot="age" slot-scope="record">
         <div v-if="!record">未知</div>
         {{ record }}
+      </template>
+      <template slot="gender" slot-scope="record">
+        <div v-if="!record">未知</div>
+        {{ record == "MALE" ? '男' : ''}}
+        {{ record == "FEMALE" ? '女' : ''}}
       </template>
       <template slot="operation" slot-scope="text, record">
         <div class="editable-row-operations">
