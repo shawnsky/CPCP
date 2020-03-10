@@ -3,34 +3,25 @@
     <div class="account-left"><UserNav skey="3"></UserNav></div>
     <div class="account-right">
       <div class="account-title">消息中心</div>
+
+      <a-spin tip="加载中..." :spinning="spinning">
       <a-card style="height: 400px; background-color: #fafafa; overflow: auto">
-        <MsgItem
-        pos="left"
-          content="你好"
-          avatar="https://i.loli.net/2020/03/02/TP81J27RbG3yixC.jpg"
-        ></MsgItem>
-        <MsgItem
-        pos="right"
-          content="你好"
-          avatar="https://i.loli.net/2020/03/02/wbq7roCxJefpun6.png"
-        ></MsgItem>
-        <MsgItem
-        pos="left"
-          content="你好"
-          avatar="https://i.loli.net/2020/03/02/TP81J27RbG3yixC.jpg"
-        ></MsgItem>
-        <MsgItem
-        pos="right"
-          content="你好"
-          avatar="https://i.loli.net/2020/03/02/wbq7roCxJefpun6.png"
-        ></MsgItem>
-        <MsgItem
-          content="你好"
-          avatar="https://i.loli.net/2020/03/02/TP81J27RbG3yixC.jpg"
-        ></MsgItem>
-        
-        
+        <div v-for="item in data.messages" v-bind:key="item.id">
+          <MsgItem
+            v-show="item.fromId == 0"
+            pos="left"
+            :content="item.msgContent"
+            avatar="https://i.loli.net/2020/03/02/TP81J27RbG3yixC.jpg"
+          ></MsgItem>
+          <MsgItem
+            v-show="item.fromId != 0"
+            pos="right"
+            :content="item.msgContent"
+            :avatar="data.bAvatar"
+          ></MsgItem>
+        </div>
       </a-card>
+      </a-spin>
 
       <div class="action-area">
         <a-icon
@@ -48,7 +39,10 @@
         ></textarea>
         <div style="float: right;">
           <span style="color: #c5c5c5">{{ msgInput.length }}/500 字</span>
-          <a-button style="margin: 16px 16px; width: 80px" @click="send"
+          <a-button
+            style="margin: 16px 16px; width: 80px"
+            @click="send"
+            :loading="loading"
             >发送</a-button
           >
         </div>
@@ -58,8 +52,10 @@
 </template>
 
 <script>
+import api from "@/api/index";
+import axios from "axios";
 import UserNav from "./UserNav";
-import MsgItem from './MsgItem'
+import MsgItem from "./MsgItem";
 export default {
   components: {
     UserNav,
@@ -67,12 +63,68 @@ export default {
   },
   data() {
     return {
-      msgInput: ""
+      spinning: true,
+      msgInput: "",
+      loading: false,
+      data: []
     };
+  },
+  mounted() {
+    const timer = setInterval(() => {
+      this.fetchList()
+    }, 3000);
+    // 通过$once来监听定时器
+    // 在beforeDestroy钩子触发时清除定时器
+    this.$once("hook:beforeDestroy", () => {
+      clearInterval(timer);
+    });
   },
   methods: {
     send() {
-      console.log(this.msgInput);
+      this.loading = true;
+      console.log(localStorage.userId);
+      axios
+        .post(
+          api.Message,
+          {
+            from_id: localStorage.userId,
+            to_id: "0",
+            content: this.msgInput
+          },
+          {
+            headers: { Authorization: localStorage.token }
+          }
+        )
+        .then(response => {
+          if (response.data.code == 1) {
+            this.msgInput = "";
+          }
+        });
+    },
+    fetchList() {
+      axios
+        .get(api.Message, {
+          params: {
+            a_id: "0",
+            b_id: localStorage.userId
+          },
+          headers: { Authorization: localStorage.token }
+        })
+        .then(response => {
+          if (response.data.code == 1) {
+            this.data = response.data.data;
+            this.loading = false;
+            this.spinning = false;
+            // setTimeout(() => {
+            //   this.fetchList();
+            // }, 3000);
+          }
+        })
+        .catch(error => {
+          if (error.response.status == 401) {
+            this.$router.push({path: '/login'})
+          }
+        })
     }
   }
 };

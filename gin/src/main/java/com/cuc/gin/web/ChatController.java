@@ -10,23 +10,20 @@ import com.cuc.gin.util.HTTPMessageText;
 import com.cuc.gin.vo.ChatMsgVo;
 import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author : Chen X.T.
  * @since : 2020/2/2, 周日
  **/
 @RestController
-@RequestMapping("/chat")
 public class ChatController {
 
     @Autowired
@@ -36,9 +33,11 @@ public class ChatController {
     private UserMapper userMapper;
 
     @RequestMapping(value = "/message", method = RequestMethod.POST)
-    public HTTPMessage<Void> sendMessage(@RequestParam("from_id") String from,
-                                         @RequestParam("to_id") String to,
-                                         @RequestParam("content") String content) {
+    public HTTPMessage<Void> sendMessage(@RequestBody Map map) {
+        String from = (String) map.get("from_id");
+        String to = (String) map.get("to_id");
+        String content = (String) map.get("content");
+        // FIXME: 2020/3/10 fix admin id = 0
         if (Strings.isNullOrEmpty(from) || Strings.isNullOrEmpty(to) || Strings.isNullOrEmpty(content)) {
             throw new IllegalArgumentException();
         }
@@ -56,6 +55,7 @@ public class ChatController {
     @RequestMapping(value = "/message", method = RequestMethod.GET)
     public HTTPMessage<ChatMsgVo> queryMessage(@RequestParam("a_id") String aId,
                                                @RequestParam("b_id") String bId) {
+        // FIXME: 2020/3/10 fix a is admin, a_id = 0
         if (Strings.isNullOrEmpty(aId) || Strings.isNullOrEmpty(bId)) {
             throw new IllegalArgumentException();
         }
@@ -67,12 +67,11 @@ public class ChatController {
         list.addAll(a2bList);
         list.sort((o1, o2) -> (int) (o1.getCreateTime()-o2.getCreateTime()));
         // Query users' profile
-        UserEntity a = userMapper.getOne(Long.parseLong(aId));
         UserEntity b = userMapper.getOne(Long.parseLong(bId));
         return new HTTPMessage<>(
                 HTTPMessageCode.Common.OK,
                 HTTPMessageText.Common.OK,
-                new ChatMsgVo(aId, a.getUsername(), a.getAvatar(), bId, b.getUsername(), b.getAvatar(), list)
+                new ChatMsgVo("0", "admin", "https://i.loli.net/2020/03/02/TP81J27RbG3yixC.jpg", bId, b.getUsername(), b.getAvatar(), list)
         );
 
 

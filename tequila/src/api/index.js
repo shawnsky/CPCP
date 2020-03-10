@@ -7,6 +7,7 @@ const api = {
   Test: base + 'test',
   TestResult: base + '/test/result',
   User: base + '/user',
-  Talk: base + '/talk'
+  Talk: base + '/talk',
+  Message: base + '/message'
 }
 export default api;
