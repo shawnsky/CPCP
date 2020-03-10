@@ -13,6 +13,7 @@ public class TalkEntity implements Serializable {
     private String username;
     private String content;
     private Long createTime;
+    private Integer replied;
 
     public TalkEntity() {
     }
@@ -55,5 +56,13 @@ public class TalkEntity implements Serializable {
 
     public void setCreateTime(Long createTime) {
         this.createTime = createTime;
+    }
+
+    public Integer getReplied() {
+        return replied;
+    }
+
+    public void setReplied(Integer replied) {
+        this.replied = replied;
     }
 }

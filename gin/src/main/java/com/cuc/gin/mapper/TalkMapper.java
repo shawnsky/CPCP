@@ -12,4 +12,5 @@ public interface TalkMapper {
     void add(TalkEntity talkEntity);
     void remove(Long id);
     List<TalkEntity> getAll();
+    void update(TalkEntity talkEntity);
 }

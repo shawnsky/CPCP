@@ -72,7 +72,7 @@ export default {
   mounted() {
     const timer = setInterval(() => {
       this.fetchList()
-    }, 3000);
+    }, 2000);
     // 通过$once来监听定时器
     // 在beforeDestroy钩子触发时清除定时器
     this.$once("hook:beforeDestroy", () => {
