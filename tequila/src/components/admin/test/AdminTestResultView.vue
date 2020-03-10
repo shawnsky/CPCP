@@ -104,8 +104,14 @@ export default {
           console.log(error);
         });
     },
-    getContact(userId) {
-      console.log(userId);
+    getContact(key) {
+      this.$router.push({
+        name: "adminChat",
+        params: {
+          idFromTalk: key,
+          usernameFromTalk: '用户#'+key
+        }
+      });
     }
   }
 };

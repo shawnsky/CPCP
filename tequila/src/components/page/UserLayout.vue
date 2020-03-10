@@ -34,7 +34,11 @@
         <a-menu-item key="profile">
           <router-link to="/user"> <a-icon type="user" />个人中心</router-link>
         </a-menu-item>
-       
+
+        <a-menu-item key="dashboard" v-show="showAdmin">
+          <router-link to="/admin"> <a-icon type="project" />后台管理</router-link>
+        </a-menu-item>
+
         <a-menu-item style="float: right" @click="logout">
           <a-icon type="logout" />退出
         </a-menu-item>
@@ -63,13 +67,17 @@ export default {
   data() {
     return {
       current: [""],
-      username: localStorage.username
+      username: localStorage.username,
+      showAdmin: false
     };
+  },
+  mounted() {
+    this.showAdmin = localStorage.userStatus == 999 ? true : false;
   },
   methods: {
     logout() {
-      localStorage.clear()
-      this.$router.push({path: '/login'})
+      localStorage.clear();
+      this.$router.push({ path: "/login" });
     }
   }
 };
