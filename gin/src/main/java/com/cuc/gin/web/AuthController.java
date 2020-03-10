@@ -50,7 +50,7 @@ public class AuthController {
             cal.setTime(new Date());
             cal.add(Calendar.HOUR_OF_DAY, 1);
             String jws = Jwts.builder().setSubject(userEntity.getId().toString()).setExpiration(cal.getTime()).signWith(jwtKey).compact();
-            UserInfoVo userInfo = new UserInfoVo(userEntity.getId(), userEntity.getUsername(), jws);
+            UserInfoVo userInfo = new UserInfoVo(userEntity.getId(), userEntity.getUsername(), jws, userEntity.getStatus());
             return new HTTPMessage<>(
                     HTTPMessageCode.Login.OK,
                     HTTPMessageText.Login.OK,

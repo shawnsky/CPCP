@@ -11,18 +11,28 @@ public class UserInfoVo implements Serializable {
     private Long userId;
     private String username;
     private String jws;
+    private Integer status;
 
     public UserInfoVo() {
     }
 
-    public UserInfoVo(Long userId, String username, String jws) {
+    public UserInfoVo(Long userId, String username, String jws, Integer status) {
         this.userId = userId;
         this.username = username;
         this.jws = jws;
+        this.status = status;
     }
 
     public Long getUserId() {
         return userId;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
     }
 
     public void setUserId(Long userId) {

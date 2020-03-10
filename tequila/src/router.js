@@ -94,6 +94,13 @@ export default new Router({
       path: '/admin',
       component: AdminLayout,
       redirect: '/admin/board',
+      beforeEnter: (to, from, next) => {
+        if (localStorage.userStatus == 999) {
+          next()
+        } else {
+          next('/')
+        }
+      },
       children: [
         {
           path: 'user',
