@@ -26,6 +26,7 @@ import AdminPostAddView from './components/admin/post/AdminPostAddView'
 import AdminTalkView from './components/admin/talk/AdminTalkView'
 import AdminTestView from './components/admin/test/AdminTestView'
 import AdminTestResultView from './components/admin/test/AdminTestResultView'
+import AdminChatView from './components/admin/chat/AdminChatView'
 
 Vue.use(Router)
 
@@ -125,6 +126,11 @@ export default new Router({
         {
           path: 'test/result',
           component: AdminTestResultView
+        },
+        {
+          path: 'chat',
+          name: 'adminChat',
+          component: AdminChatView
         }
       ]
     },

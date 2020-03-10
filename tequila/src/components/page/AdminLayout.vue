@@ -81,6 +81,12 @@
               </router-link>
             </a-menu-item>
           </a-sub-menu>
+
+          <a-menu-item key="11">
+              <router-link to="/admin/chat">
+                <a-icon type="message" />沟通交流
+              </router-link>
+            </a-menu-item>
         </a-menu>
       </a-layout-sider>
       <a-layout :style="{ marginLeft: collapsed ? '80px' : '280px' }">

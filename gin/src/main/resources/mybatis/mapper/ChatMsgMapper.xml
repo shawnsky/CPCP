@@ -13,6 +13,13 @@
         id, from_id, to_id, msg_content, create_time
     </sql>
 
+    <select id="queryAll" resultMap="BaseResultMap" >
+        SELECT
+        <include refid="baseCols" />
+        FROM chat_msg
+        WHERE 1 = 1
+    </select>
+
 
     <select id="queryByFromTo" parameterType="java.lang.Long" resultMap="BaseResultMap" >
         SELECT

@@ -5,7 +5,7 @@
       <template slot="operation" slot-scope="text, record">
         <div class="editable-row-operations">
           <span>
-            <a @click="() => reply(record.key)">回复</a>
+            <a @click="() => reply(record.userId)">回复</a>
           </span>
           <span>
             <a @click="() => del(record.key)">删除</a>
@@ -58,7 +58,7 @@ export default {
     };
   },
   mounted() {
-    this.fetchList()
+    this.fetchList();
   },
   methods: {
     handleChange(value, key, column) {
@@ -71,42 +71,48 @@ export default {
     },
     fetchList() {
       axios
-      .get(api.Talk, {
-        headers: { Authorization: localStorage.token }
-      })
-      .then(response => {
-        var rawList = response.data.data;
-        rawList.map(element => {
-          element.key = element.id;
-          element.createTime = new Date(parseInt(element.createTime))
-            .toLocaleString()
-            .replace(/:\d{1,2}$/, " ");
+        .get(api.Talk, {
+          headers: { Authorization: localStorage.token }
+        })
+        .then(response => {
+          var rawList = response.data.data;
+          rawList.map(element => {
+            element.key = element.id;
+            element.createTime = new Date(parseInt(element.createTime))
+              .toLocaleString()
+              .replace(/:\d{1,2}$/, " ");
+          });
+          this.data = rawList;
+        })
+        .catch(error => {
+          this.$router.push({ path: "/login" });
+          console.log(error);
         });
-        this.data = rawList;
-      })
-      .catch(error => {
-        this.$router.push({ path: "/login" });
-        console.log(error);
-      });
     },
     del(key) {
       axios
-      .delete(api.Talk + '/' + key, {
-        headers: { Authorization: localStorage.token }
-      })
-      .then(response => {
-        if (response.status == 204) {
-          this.$message.success('删除成功')
-          this.fetchList()
-        } else {
-          this.$message.error('删除失败')
-        }
-      })
+        .delete(api.Talk + "/" + key, {
+          headers: { Authorization: localStorage.token }
+        })
+        .then(response => {
+          if (response.status == 204) {
+            this.$message.success("删除成功");
+            this.fetchList();
+          } else {
+            this.$message.error("删除失败");
+          }
+        });
     },
     reply(key) {
-      console.log(key)
+      console.log(key);
+      this.$router.push({
+        name: "adminChat",
+        params: {
+          idFromTalk: key,
+          usernameFromTalk: '临时用户'
+        }
+      });
     }
-
   }
 };
 </script>

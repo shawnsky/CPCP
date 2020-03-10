@@ -11,6 +11,8 @@ import java.util.List;
 public interface ChatMsgMapper {
     void insert(ChatMsgEntity msg);
 
+    List<ChatMsgEntity> queryAll();
+
     List<ChatMsgEntity> queryByFromTo(@Param("fromId")Long fromId, @Param("toId")Long toId);
 
 }

@@ -1,5 +1,6 @@
 package com.cuc.gin.web;
 
+import com.cuc.gin.annotation.AdminRequired;
 import com.cuc.gin.mapper.ChatMsgMapper;
 import com.cuc.gin.mapper.UserMapper;
 import com.cuc.gin.model.ChatMsgEntity;
@@ -12,12 +13,12 @@ import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author : Chen X.T.
@@ -75,5 +76,26 @@ public class ChatController {
         );
 
 
+    }
+    @RequestMapping(value = "/message/user", method = RequestMethod.GET)
+    @AdminRequired
+    public HTTPMessage<List<UserEntity>> getChatUsers(HttpServletRequest request, HttpServletResponse response) {
+        List<ChatMsgEntity> list = chatMsgMapper.queryAll();
+        List<UserEntity> userEntitySet = new ArrayList<>();
+        Set<Long> userIds = new HashSet<>();
+        list.forEach(chat -> {
+            if (chat.getFromId() != 0 && !userIds.contains(chat.getFromId())) {
+                userEntitySet.add(userMapper.getOne(chat.getFromId()));
+                userIds.add(chat.getFromId());
+            } else if (chat.getToId() != 0 && !userIds.contains(chat.getToId())) {
+                userEntitySet.add(userMapper.getOne(chat.getToId()));
+                userIds.add(chat.getToId());
+            }
+        });
+        return new HTTPMessage<>(
+                HTTPMessageCode.Common.OK,
+                HTTPMessageText.Common.OK,
+                userEntitySet
+        );
     }
 }
