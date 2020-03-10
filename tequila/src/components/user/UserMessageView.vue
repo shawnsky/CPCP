@@ -82,7 +82,6 @@ export default {
   methods: {
     send() {
       this.loading = true;
-      console.log(localStorage.userId);
       axios
         .post(
           api.Message,

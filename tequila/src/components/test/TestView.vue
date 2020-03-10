@@ -50,7 +50,6 @@ export default {
         this.$message.success("您已经完成本次心理测试")
         return
       }
-      console.log(this.checkedList)
       axios
       .post(api.TestResult, {
         userId: localStorage.userId,

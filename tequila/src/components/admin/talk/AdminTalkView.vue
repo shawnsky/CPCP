@@ -104,7 +104,6 @@ export default {
         });
     },
     reply(key, username) {
-      console.log(key);
       this.$router.push({
         name: "adminChat",
         params: {

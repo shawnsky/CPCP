@@ -97,7 +97,6 @@ export default {
   },
   methods: {
     changeCurrent(id, username) {
-      console.log(id, username);
       this.currentUserId = id;
       this.currentUsername = username;
       this.data = [];
@@ -133,7 +132,6 @@ export default {
           this.currentUserId = this.udata[0].id;
           this.currentUsername = this.udata[0].username;
           this.okToFetch = true;
-          console.log(this.currentUserId);
         })
         .finally(() => {
           // load user from talk reply
@@ -146,7 +144,6 @@ export default {
         });
     },
     fetchList() {
-      console.log(this.currentUserId);
       axios
         .get(api.Message, {
           params: {
