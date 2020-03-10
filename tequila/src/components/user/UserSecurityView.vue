@@ -10,7 +10,7 @@
 
       <div class="setting" style="margin-bottom: 16px">
         <label>新密码</label><br>
-        <a-input placeholder="建议使用安全强度高的密码" v-model="newPassword" style="width: 300px"></a-input>
+        <a-input-password placeholder="建议使用安全强度高的密码" v-model="newPassword" style="width: 300px"></a-input-password>
       </div>
 
       <a-button type="primary" style="float: right" @click="submit">更新设置</a-button>

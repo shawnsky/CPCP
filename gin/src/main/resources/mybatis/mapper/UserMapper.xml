@@ -53,7 +53,7 @@
 
     <update id="updateOne" parameterType="com.cuc.gin.model.UserEntity" >
         UPDATE sys_user
-        SET username = #{username}, nickname = #{nickname}, age = #{age}, gender = #{gender}
+        SET username = #{username}, nickname = #{nickname}, age = #{age}, gender = #{gender}, password = #{password}
         WHERE id = #{id}
     </update>
 

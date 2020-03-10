@@ -5,7 +5,7 @@
       <template slot="operation" slot-scope="text, record">
         <div class="editable-row-operations">
           <span>
-            <a @click="() => reply(record.userId)">回复</a>
+            <a @click="() => reply(record.userId, record.username)">回复</a>
           </span>
           <span>
             <a @click="() => del(record.key)">删除</a>
@@ -103,13 +103,13 @@ export default {
           }
         });
     },
-    reply(key) {
+    reply(key, username) {
       console.log(key);
       this.$router.push({
         name: "adminChat",
         params: {
           idFromTalk: key,
-          usernameFromTalk: '临时用户'
+          usernameFromTalk: username
         }
       });
     }

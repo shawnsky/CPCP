@@ -1,13 +1,16 @@
 package com.cuc.gin.web;
 
 import com.cuc.gin.annotation.AdminRequired;
+import com.cuc.gin.mapper.ChatMsgMapper;
 import com.cuc.gin.mapper.TestEntryMapper;
 import com.cuc.gin.mapper.TestResultMapper;
+import com.cuc.gin.model.ChatMsgEntity;
 import com.cuc.gin.model.TestEntryEntity;
 import com.cuc.gin.model.TestResultEntity;
 import com.cuc.gin.util.HTTPMessage;
 import com.cuc.gin.util.HTTPMessageCode;
 import com.cuc.gin.util.HTTPMessageText;
+import com.google.common.base.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,10 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author : Chen X.T.
@@ -36,6 +36,9 @@ public class TestController {
 
     @Autowired
     private TestResultMapper resultMapper;
+
+    @Autowired
+    private ChatMsgMapper chatMsgMapper;
 
     private static Map<String, Integer> scoreSheet = new HashMap<>();
     static {
@@ -111,6 +114,12 @@ public class TestController {
         Instant ins = ldt.atZone(ZoneId.of("Asia/Shanghai")).toInstant();
         resultEntity.setCreateTime(ins.toEpochMilli());
         resultMapper.add(resultEntity);
+
+        // send result to user via chat
+        String content = "测试完成！您的结果为["+sb.toString()+"]，评估值为"+String.valueOf(value);
+        ChatMsgEntity msgEntity = new ChatMsgEntity(0L, Long.parseLong(userId), content, ins.toEpochMilli());
+        chatMsgMapper.insert(msgEntity);
+
         return new HTTPMessage<>(
                 HTTPMessageCode.Common.OK,
                 HTTPMessageText.Common.OK
